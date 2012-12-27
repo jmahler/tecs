@@ -1,0 +1,12 @@
+/**
+ * Propagate a carry, used with Incriment (Inc)
+ */
+
+CHIP PropCarry {
+    IN in, c;
+    OUT out, carry;
+
+    PARTS:
+	Xor(a=in, b=c, out=out);
+	And(a=in, b=c, out=carry);
+}
