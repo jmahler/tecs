@@ -12,5 +12,44 @@ CHIP Mux {
     OUT out;
 
     PARTS:
-    // Put your code here.
+	// simple solution
+	/*
+	Not(in=sel, out=nsel);
+	And(a=a, b=nsel, out=x1);
+	And(a=b, b=sel, out=x2);
+	Or(a=x1, b=x2, out=out);
+	*/
+
+	// simple, w/ hazard fix
+	// 13 gates, 1 Not, 2*3 And, 3*2 Or
+	/*
+	Not(in=sel, out=nsel);
+	And(a=a, b=nsel, out=x1);
+	And(a=b, b=sel, out=x2);
+	And(a=a, b=b, out=x3);
+	Or(a=x1, b=x2, out=y1);
+	Or(a=y1, b=x3, out=out);
+	*/
+
+	// Solution using Nand's, w/o hazard fix
+	/*
+	Nand(a=sel, b=sel, out=nsel);
+
+	Nand(a=a,   b=nsel, out=x1);
+	Nand(a=sel, b=b,    out=x2);
+
+	Nand(a=x1,  b=x2,   out=out);
+	*/
+
+	// Solution using Nand's, w/ hazard fix
+	// 7 gates, much better than equivalent composite solution
+	Nand(a=sel, b=sel, out=nsel);
+
+	Nand(a=a,   b=nsel, out=x1);
+	Nand(a=sel, b=b,    out=x2);
+	Nand(a=a,   b=b,    out=x3);
+
+	Nand(a=x1,  b=x2,   out=ny1);
+	Nand(a=ny1, b=ny1,  out=y1);
+	Nand(a=y1,  b=x3,   out=out);
 }

@@ -11,7 +11,6 @@
  *       h if sel == 111
  */
 
-
 CHIP Mux8Way16 {
     IN a[16], b[16], c[16], d[16],
        e[16], f[16], g[16], h[16],
@@ -19,5 +18,16 @@ CHIP Mux8Way16 {
     OUT out[16];
 
     PARTS:
-    // Put your code here.
+	Mux8Way4(a=a[0..3], b=b[0..3], c=c[0..3], d=d[0..3],
+			e=e[0..3], f=f[0..3], g=g[0..3], h=h[0..3],
+			sel=sel, out=out[0..3]);
+	Mux8Way4(a=a[4..7], b=b[4..7], c=c[4..7], d=d[4..7],
+			e=e[4..7], f=f[4..7], g=g[4..7], h=h[4..7],
+			sel=sel, out=out[4..7]);
+	Mux8Way4(a=a[8..11], b=b[8..11], c=c[8..11], d=d[8..11],
+			e=e[8..11], f=f[8..11], g=g[8..11], h=h[8..11],
+			sel=sel, out=out[8..11]);
+	Mux8Way4(a=a[12..15], b=b[12..15], c=c[12..15], d=d[12..15],
+			e=e[12..15], f=f[12..15], g=g[12..15], h=h[12..15],
+			sel=sel, out=out[12..15]);
 }

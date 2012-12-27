@@ -1,0 +1,43 @@
+/** 
+ * 8 Way Multiplexor.
+ * out = a if sel == 000
+ *       b if sel == 001
+ *       c if sel == 010
+ *       d if sel == 011
+ *       e if sel == 100
+ *       f if sel == 101
+ *       g if sel == 110
+ *       h if sel == 111
+ */
+
+CHIP Mux8Way {
+    IN a, b, c, d, e, f, g, h, sel[3];
+    OUT out;
+
+    PARTS:
+	Not(in=sel[0], out=nsel0);
+	Not(in=sel[1], out=nsel1);
+	Not(in=sel[2], out=nsel2);
+
+	And3Way(a=nsel2,  b=nsel1,  c=nsel0,  out=sela);
+	And3Way(a=nsel2,  b=nsel1,  c=sel[0], out=selb);
+	And3Way(a=nsel2,  b=sel[1], c=nsel0,  out=selc);
+	And3Way(a=nsel2,  b=sel[1], c=sel[0], out=seld);
+	And3Way(a=sel[2], b=nsel1,  c=nsel0,  out=sele);
+	And3Way(a=sel[2], b=nsel1,  c=sel[0], out=self);
+	And3Way(a=sel[2], b=sel[1], c=nsel0,  out=selg);
+	And3Way(a=sel[2], b=sel[1], c=sel[0], out=selh);
+
+	And(a=a, b=sela, out=outa);
+	And(a=b, b=selb, out=outb);
+	And(a=c, b=selc, out=outc);
+	And(a=d, b=seld, out=outd);
+	And(a=e, b=sele, out=oute);
+	And(a=f, b=self, out=outf);
+	And(a=g, b=selg, out=outg);
+	And(a=h, b=selh, out=outh);
+
+	Or8Way(in[0]=outa, in[1]=outb, in[2]=outc,
+			in[3]=outd, in[4]=oute, in[5]=outf,
+			in[6]=outg, in[7]=outh, out=out);
+}
