@@ -72,7 +72,7 @@ CHIP ALU {
 	Not16(in=opout, out=nopout);
 
 	// final operation, select Not of result
-	Mux16(a=opout, b=nopout, sel=no, out=fout);
+	Mux16(a=opout, b=nopout, sel=no, out=fout, out=out);
 
 	// (ng) sign bit is 1 if < 0
 	Split16(in=fout, p=ng);
@@ -80,7 +80,4 @@ CHIP ALU {
 	// (zr) all bits are zero?
 	Or16Way(in=fout, out=notzr);
 	Not(in=notzr, out=zr);
-
-	// final output, Or used as a buffer
-	Or16(a[0..15]=false, b=fout, out=out);
 }
