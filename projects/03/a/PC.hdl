@@ -17,6 +17,33 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    // Put your code here.
-}
 
+	// load control signal
+	Or(a=load, b=inc, out=o1);
+	Or(a=o1, b=reset, out=cload);
+
+	Inc16(in=rout, out=incout);
+
+	//  inc  load  reset |  xsel
+	// ------------------+-------
+	//   0     0     0   |  0  0  hold
+	//   1     X     X   |  1  1  reset
+	//   0     1     X   |  1  0  load
+	//   0     0     1   |  0  1  inc
+
+	Or(a=reset, b=load, out=xsel1);
+
+	Not(in=reset, out=nreset);
+	Not(in=load, out=nload);
+
+	And(a=nload, b=nreset, out=a1);
+	And(a=a1, b=inc, out=a2);
+	Or(a=a2, b=reset, out=xsel0);
+
+	// select one of the three inputs
+	Mux4Way16(a=false, b=incout, c=in, d=false,
+				sel[0]=xsel0, sel[1]=xsel1,
+				out=xout);
+
+	Register(in=xout, load=cload, out=rout, out=out);
+}
