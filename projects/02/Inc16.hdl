@@ -13,20 +13,5 @@ CHIP Inc16 {
     OUT out[16];
 
     PARTS:
-	Inc(in=in[0], out=out[0], carry=c1);
-	PropCarry(in=in[1], c=c1, out=out[1], carry=c2);
-	PropCarry(in=in[2], c=c2, out=out[2], carry=c3);
-	PropCarry(in=in[3], c=c3, out=out[3], carry=c4);
-	PropCarry(in=in[4], c=c4, out=out[4], carry=c5);
-	PropCarry(in=in[5], c=c5, out=out[5], carry=c6);
-	PropCarry(in=in[6], c=c6, out=out[6], carry=c7);
-	PropCarry(in=in[7], c=c7, out=out[7], carry=c8);
-	PropCarry(in=in[8], c=c8, out=out[8], carry=c9);
-	PropCarry(in=in[9], c=c9, out=out[9], carry=c10);
-	PropCarry(in=in[10], c=c10, out=out[10], carry=c11);
-	PropCarry(in=in[11], c=c11, out=out[11], carry=c12);
-	PropCarry(in=in[12], c=c12, out=out[12], carry=c13);
-	PropCarry(in=in[13], c=c13, out=out[13], carry=c14);
-	PropCarry(in=in[14], c=c14, out=out[14], carry=c15);
-	PropCarry(in=in[15], c=c15, out=out[15], carry=null);
+	Add16(a=in, b[1..15]=false, b[0]=true, out=out);
 }
