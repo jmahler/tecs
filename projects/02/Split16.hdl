@@ -1,0 +1,29 @@
+/**
+ * Split 16-bits in to their own indiviual pins.
+ */
+
+CHIP Split16 {
+    IN in[16];
+    OUT a, b, c, d,
+		e, f, g, h,
+		i, j, k, l,
+		m, n, o, p;
+
+    PARTS:
+	Or(a=false, b=in[0],  out=a);
+	Or(a=false, b=in[1],  out=b);
+	Or(a=false, b=in[2],  out=c);
+	Or(a=false, b=in[3],  out=d);
+	Or(a=false, b=in[4],  out=e);
+	Or(a=false, b=in[5],  out=f);
+	Or(a=false, b=in[6],  out=g);
+	Or(a=false, b=in[7],  out=h);
+	Or(a=false, b=in[8],  out=i);
+	Or(a=false, b=in[9],  out=j);
+	Or(a=false, b=in[10], out=k);
+	Or(a=false, b=in[11], out=l);
+	Or(a=false, b=in[12], out=m);
+	Or(a=false, b=in[13], out=n);
+	Or(a=false, b=in[14], out=o);
+	Or(a=false, b=in[15], out=p);
+}
