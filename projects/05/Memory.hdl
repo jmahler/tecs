@@ -27,5 +27,22 @@ CHIP Memory {
     OUT out[16];
 
     PARTS:
-    // Put your code here.
+
+	// Partial address decoding is used and
+	// invalid address are not compensated for.
+
+	// ram selected
+	Not(in=address[14], out=selram);
+	// screen or key selected, don't care about key
+	Not(in=selram, out=selscr);
+
+	And(a=load, b=selram, out=loadram);
+	And(a=load, b=selscr, out=loadscr);
+
+	RAM16K(in=in, load=loadram, address=address[0..13], out=outram);
+	Screen(in=in, load=loadscr, address=address[0..12], out=outscr);
+	Keyboard(out=outkey);
+
+	Mux4Way16(a=outram, b=outram, c=outscr, d=outkey,
+				sel=address[13..14], out=out);
 }
