@@ -37,6 +37,85 @@ CHIP CPU {
         addressM[15],    // RAM address (of M)
         pc[15];          // ROM address (of next instruction)
 
-     PARTS:
-    // Put your code here.
+	PARTS:
+
+	// 15  12 11   6 5 3 2 0
+	// ---------------------
+	// i xx a cccccc ddd jjj
+	//
+	// (These codes are also documented in Chapter 6)
+	//
+	// i: 0 A-instruction (15-bit number), to A register
+	//    1 C-instruction (command)
+	//
+	// a: input to ALU, A or M
+	//
+	// c: ALU command
+	//
+	// d: destination, various locations
+	//	(one bit per register)
+	//	100 A
+	//	010 D
+	//	001 M
+	//	110 AD
+	//	011 DM
+	//  ...
+	//
+	// j: jump
+	//  2 0
+	//  111  JMP
+	//  010  JEQ  ==
+	//  001  JGT  >
+	//  100  JLT  <
+	//  110  JLE  <=
+	//  ...
+	
+	// Mux for A register, instruction input and ALU input
+	Mux16(a=instruction, b=outMX, sel=instruction[15], out=outX1);
+
+	// Load the A register when a value is given (@12)
+	// or when the command specifies A as the destination
+	Not(in=instruction[15], out=ni15);
+	Or(a=ni15, b=instruction[5], out=loadA);
+	ARegister(in=outX1, load=loadA, out=outA, out[0..14]=addressM);
+
+	// Select ALU input: A register or Memory
+	Mux16(a=outA, b=inM, sel=instruction[12], out=outAM);
+
+	// store the ALU results in D when a command specifies
+	And(a=instruction[15], b=instruction[4], out=loadD);
+	DRegister(in=outMX, load=loadD, out=outD);
+
+	ALU(x=outD, y=outAM,
+	 			zx=instruction[11],
+				nx=instruction[10],
+				zy=instruction[9],
+				ny=instruction[8],
+				f=instruction[7],
+				no=instruction[6],
+				out=outM,
+				out=outMX,
+				zr=zr,  // zero
+				ng=ng); // less than (not greater)
+
+	// nl greater than (not less)
+	Or(a=zr, b=ng, out=nlX);
+	Not(in=nlX, out=nl);
+
+	// zero
+	And(a=zr, b=instruction[1], out=jmp1);
+	// less than
+	And(a=ng, b=instruction[2], out=jmp2);
+	// greater than
+	And(a=nl, b=instruction[0], out=jmp3);
+
+	Or(a=jmp1, b=jmp2, out=jmpX);
+	Or(a=jmp3, b=jmpX, out=jmpXX);
+	And(a=instruction[15], b=jmpXX, out=jump);
+
+	Xor(a=true, b=jump, out=inc);
+	PC(in=outA, load=jump, inc=inc, reset=reset, out[0..14]=pc);
+
+	// write memory signal
+	And(a=instruction[15], b=instruction[3], out=writeM);
 }
