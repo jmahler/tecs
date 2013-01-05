@@ -1,7 +1,7 @@
 NAME
 ----
 
-tecs - solutions to the projects of "The Elements of Computing Systems"
+tecs - completed projects for "The Elements of Computing Systems"
 
 DESCRIPTION
 -----------
