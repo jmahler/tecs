@@ -15,12 +15,13 @@ Shimon Schocken (2005)][nand2tetris].
 AUTHOR
 ------
 
-Jeremiah Mahler <jmmahler@gmail.com>
+Jeremiah Mahler <jmmahler@gmail.com><br>
+<http://github.com/jmahler>
 
 COPYRIGHT
 ---------
 
-Copyright &copy; 2013, Jeremiah Mahler.  All Rights Reserved.<br>
+Copyright &copy; 2014, Jeremiah Mahler.  All Rights Reserved.<br>
 This project is free software and released under
 the [GNU General Public License][gpl].
 
